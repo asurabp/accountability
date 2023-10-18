@@ -3,20 +3,24 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\ItemsController;
-
+use App\Http\Controllers\IssuancesController;
+use App\Http\Controllers\BuildUpsController;
+use App\Http\Controllers\UsersController;
 
 Route::view('/', 'welcome');
 Route::view('view', 'view');
-//Route::get('employees',[EmployeesController::class, 'index']);
-//Route::get('employees/create',[EmployeesController::class, 'create']);
-//Route::post('employees',[EmployeesController::class, 'store']);
-//Route::get('employees/{employee}',[EmployeesController::class, 'show']);
-//Route::get('employees/{employee}/edit',[EmployeesController::class, 'edit']);
-//Route::patch('employees/{employee}',[EmployeesController::class, 'update']);
-//Route::delete('employees/{employee}',[EmployeesController::class, 'destroy']);
 Route::resource('employees', EmployeesController::class);
-
-
 Route::resource('items', ItemsController::class);
-//Route::get('items',[ItemsController::class, 'index']);
-//Route::get('items/create',[ItemsController::class, 'create']);
+Route::resource('issuances', IssuancesController::class);
+Route::resource('buildups', BuildUpsController::class);
+
+// Rebuild this Employee->Users
+Route::resource('users', UsersController::class);
+
+
+// Route::get('/login', [\App\Http\Controllers\LoginController::class, 'index']);
+// Route::post('/login', [\App\Http\Controllers\LoginController::class, 'auth'])->name('login');
+// Route::get('/logout', [\App\Http\Controllers\LoginController::class, 'logout'])->name('logout');
+// Route::get('/register', [\App\Http\Controllers\LoginController::class, 'registerForm']);
+// Route::post('/register', [\App\Http\Controllers\LoginController::class, 'register'])->name('register');
+// Route::get('/user', [\App\Http\Controllers\LoginController::class, 'user'])->name('user');

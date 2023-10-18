@@ -4,14 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Employee extends Model
 {
     use HasFactory;
 
+    use SoftDeletes;
+
     protected $guarded = [];
     protected $attributes = [
         'active' => 1
+    ];
+
+    protected $fillable = [
+            'name', 'email', 'active'
     ];
 
     public function getActiveAttribute($attribute)
@@ -29,11 +36,6 @@ class Employee extends Model
         return $query->where('active', 0);
     }
 
-    public function item()
-    {
-        return  $this->belongsTo(Item::class);
-    }
-
     public function activeOptions()
     {
         return [
@@ -42,4 +44,10 @@ class Employee extends Model
             2 => 'Resigned',
         ];
     }
+
+    public function issuances()
+    {
+        return $this->hasMany(Issuance::class);
+    }
+
 }

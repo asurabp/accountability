@@ -4,93 +4,61 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use Illuminate\Http\Request;
+use App\Http\Requests\ItemRequest;
 
-class Item2Controller extends Controller
+class ItemsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
+
+
     public function index()
     {
         $items = Item::all();
         return view('items.index', compact('items'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        $items = new Item();
-        return view('items.create', compact('items'));
+        $item = new Item();
+        return view('items.create', compact('item'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(ItemRequest $request)
     {
-        Item::create($this->validateRequest());
-        return redirect('items');
+        Item::create($request->validated());
+        return redirect('items')->with('success','Item created successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Item  $item
-     * @return \Illuminate\Http\Response
-     */
     public function show(Item $item)
     {
         return view('items.show', compact('item'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Item  $item
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Item $item)
     {
         return view('items.edit', compact('item'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Item  $item
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Item $item)
+    public function update(ItemRequest $request, Item $item)
     {
-        $item->update($this->validateRequest());
+        $item->update($request->validated());
+        return redirect('items')->with('success','Item edited successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Item  $item
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Item $item)
     {
-        $item->destroy();
-        return redirect('items');
-    }
 
-    private function validateRequest() {
-        return request()->validate([
-            'name' => 'required',
-            'quantity' => 'nullable',
-        ]);
+        if ($item->issuances()->count() > 0) {
+            return redirect('items')->with('error', 'Cannot delete item ' . $item->name);
+        } else {
+            $item->delete();
+            return redirect('items')->with('success', 'Item deleted successfully!');
+        }
+        $item->delete();
+        return redirect('items/')->with('success','Item deleted successfully!');
     }
 }

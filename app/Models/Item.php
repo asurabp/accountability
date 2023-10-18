@@ -4,15 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Item extends Model
 {
     use HasFactory;
 
+    use SoftDeletes;
+
     protected $guarded = [];
 
-    public function employees()
+    // public function employee()
+    // {
+    //     return $this->hasMany(Employee::class);
+    // }
+
+    public function issuances()
     {
-        return $this->hasMany(Employee::class);
+        return $this->hasMany(Issuance::class);
     }
+
 }

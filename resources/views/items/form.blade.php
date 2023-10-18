@@ -1,8 +1,10 @@
 <div class="form-group">
-    <label class="form-label">Name</label>
-    <input type="text" class="form-control" name="name">
-    <div>{{ $errors->first('name') }}</div>
-</div>
+    <label for="name" class="form-label">Name</label>
+    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') ?? $item->name }}">
 
+    @error('name')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
 
 @csrf
